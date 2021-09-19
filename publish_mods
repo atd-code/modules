@@ -1,0 +1,20 @@
+#!/bin/bash
+
+CUSTOM_MOD_DIR='atd-code'
+PYTHON3_USER_SITE=`python3 -m site --user-site`
+PACKAGE_LOCATION=$PYTHON3_USER_SITE/$CUSTOM_MOD_DIR
+
+echo Updating Modules in $PACKAGE_LOCATION
+
+if [ -d $PACKAGE_LOCATION ]
+then echo $CUSTOM_MOD_DIR modules directory found.
+else
+	echo $CUSTOM_MOD_DIR modules directory not found - creating $PACKAGE_LOCATION.
+	mkdir $PACKAGE_LOCATION
+fi
+
+rsync -u -r --exclude='publish*' .  $PACKAGE_LOCATION --delete
+
+echo Modules updated.
+
+exit
