@@ -1,19 +1,16 @@
 #!/bin/bash
+# atd-code Module Publishing
 
-CUSTOM_MOD_DIR='atd-code'
-PYTHON3_USER_SITE=`python3 -m site --user-site`
-PACKAGE_LOCATION=$PYTHON3_USER_SITE/$CUSTOM_MOD_DIR
+USER_SITE=`python3 -m site --user-site`
 
-echo Updating Modules in $PACKAGE_LOCATION
+MODULE_LIST=($ls*)  # List all files in the current directory
 
-if [ -d $PACKAGE_LOCATION ]
-then echo $CUSTOM_MOD_DIR modules directory found.
-else
-	echo $CUSTOM_MOD_DIR modules directory not found - creating $PACKAGE_LOCATION.
-	mkdir $PACKAGE_LOCATION
-fi
+echo Updating Modules in $USER_SITE
 
-rsync -u -r --exclude='publish*' .  $PACKAGE_LOCATION --delete
+for module in $MODULE_LIST ; do
+	echo Updating: $module
+	rsync -u -r --delete $module/ $USER_SITE/$module/
+done
 
 echo Modules updated.
 
